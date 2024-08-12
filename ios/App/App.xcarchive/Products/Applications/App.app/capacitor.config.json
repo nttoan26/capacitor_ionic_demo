@@ -1,0 +1,11 @@
+{
+	"appId": "ionic.toyotaexample",
+	"appName": "toyotaexample",
+	"webDir": "dist",
+	"packageClassList": [
+		"AppPlugin",
+		"HapticsPlugin",
+		"KeyboardPlugin",
+		"StatusBarPlugin"
+	]
+}
