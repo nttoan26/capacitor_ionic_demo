@@ -12,6 +12,9 @@
 
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
+FASTLANE_USER="nttoan26@yahoo.com"
+FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD="vktk-hoon-orqk-bspq"
+
 
 default_platform(:ios)
 
@@ -19,16 +22,77 @@ platform :ios do
   desc "Generate new localized screenshots"
   lane :screenshots do
     capture_screenshots(workspace: "App.xcworkspace", scheme: "App")
-    # frameit
-    # upload_to_app_store
+    upload_to_app_store
   end
 
   lane :test do
-    run_tests(scheme: "AppUITests")
+    run_tests(scheme: "App")
   end
 
-  lane :beta do
+  lane :testflight do
+    # api_key = app_store_connect_api_key(
+    #   key_id: "D383SF739",
+    #   issuer_id: "6053b7fe-68a8-4acb-89be-165aa6465141",
+    #   key_filepath: "./AuthKey_D383SF739.p8",
+    #   duration: 1200, # optional (maximum 1200)
+    #   in_house: false # optional but may be required if using match/sigh
+    # )
+    sync_code_signing(type: "adhoc")
+    increment_version_number_in_xcodeproj(scheme: "App", version_number: "0.9")
+    increment_build_number_in_xcodeproj(scheme: "App")
     build_app(scheme: "App")
-    upload_to_testflight
+    upload_to_testflight(
+      changelog: "initial version",
+      beta_app_description: "beta version desc",
+      beta_app_review_info: {
+        contact_email: "email@email.com",
+        contact_first_name: "Connect",
+        contact_last_name: "API",
+        contact_phone: "4696041497",
+        demo_account_name: "demo@email.com",
+        demo_account_password: "connectapi",
+        notes: "this is review note for the reviewer <3 thank you for reviewing"
+      },
+      localized_app_info: {
+        "default": {
+          feedback_email: "default@email.com",
+          marketing_url: "https://example.com/marketing-default",
+          privacy_policy_url: "https://example.com/privacy-default",
+          description: "Default description",
+        },
+        "en-GB": {
+          feedback_email: "en-gb@email.com",
+          marketing_url: "https://example.com/marketing-en-gb",
+          privacy_policy_url: "https://example.com/privacy-en-gb",
+          description: "en-gb description",
+        }
+      },
+      localized_build_info: {
+        "default": {
+          whats_new: "hihihi",
+        },
+        "en-GB": {
+          whats_new: "hahaha",
+        }
+      }
+    )
+  end
+
+  lane :release do
+    sync_code_signing(type: "appstore")
+    build_app(scheme: "App")
+    upload_to_app_store(submit_for_review: false)
+  end
+
+  lane :add_tester do
+    upload_to_testflight(skip_submission: true, distribute_only: true, first_name: "Toan", last_name: "Nguyen", email: "nttoan26@yahoo.com")
+  end
+
+  lane :register_devices_adhoc do
+    register_devices(
+      devices: {
+        "Luka iPhone 6" => "1234567890123456789012345678901234567890",
+    })
+    sync_code_signing(force_for_new_devices: true, type: "adhoc")
   end
 end

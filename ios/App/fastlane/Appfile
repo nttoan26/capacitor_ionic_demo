@@ -1,5 +1,5 @@
 app_identifier("ionic.toyotaexample") # The bundle identifier of your app
-# apple_id("[[APPLE_ID]]") # Your Apple Developer Portal username
+apple_id("nttoan26@yahoo.com")
 
 
 # For more information about the Appfile, see:

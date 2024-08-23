@@ -29,3 +29,10 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+android/gradle/wrapper/gradle-wrapper.jar
+android/gradle/wrapper/gradle-wrapper.properties
+ios/App/App.ipa
+ios/App/App.app.dSYM.zip
+ios/App/fastlane/report.xml
+ios/App/fastlane/test_output/*
+ios/App/build_log/*

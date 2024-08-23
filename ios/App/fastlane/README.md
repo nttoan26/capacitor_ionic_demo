@@ -31,10 +31,34 @@ Generate new localized screenshots
 
 
 
-### ios build
+### ios testflight
 
 ```sh
-[bundle exec] fastlane ios build
+[bundle exec] fastlane ios testflight
+```
+
+
+
+### ios release
+
+```sh
+[bundle exec] fastlane ios release
+```
+
+
+
+### ios add_tester
+
+```sh
+[bundle exec] fastlane ios add_tester
+```
+
+
+
+### ios register_devices_adhoc
+
+```sh
+[bundle exec] fastlane ios register_devices_adhoc
 ```
 
 
