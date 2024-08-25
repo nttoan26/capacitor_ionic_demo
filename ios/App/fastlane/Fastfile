@@ -19,31 +19,44 @@ FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD="vktk-hoon-orqk-bspq"
 default_platform(:ios)
 
 platform :ios do
-  desc "Generate new localized screenshots"
+  
   lane :screenshots do
-    capture_screenshots(workspace: "App.xcworkspace", scheme: "App")
-    upload_to_app_store
+    capture_screenshots(
+      scheme: "AppUITests",
+      languages: [ "en-US", "fr-FR" ],
+      output_directory: "./fastlane/screenshots",
+      devices: [
+        "iPhone 15 Plus",
+      ],
+      output_simulator_logs: false,
+      headless: true,
+      dark_mode: false,
+      buildlog_path: "./build_log",
+      clear_previous_screenshots: true
+    )
+    upload_to_app_store(
+      skip_binary_upload: true,
+      run_precheck_before_submit: false,
+      submit_for_review: false,
+      skip_app_version_update: true,
+      automatic_release: false,
+      skip_metadata: true,
+      skip_screenshots: false,
+    )
   end
 
   lane :test do
     run_tests(scheme: "App")
   end
 
-  lane :testflight do
-    # api_key = app_store_connect_api_key(
-    #   key_id: "D383SF739",
-    #   issuer_id: "6053b7fe-68a8-4acb-89be-165aa6465141",
-    #   key_filepath: "./AuthKey_D383SF739.p8",
-    #   duration: 1200, # optional (maximum 1200)
-    #   in_house: false # optional but may be required if using match/sigh
-    # )
+  lane :submit_testflight_build do
     sync_code_signing(type: "adhoc")
-    increment_version_number_in_xcodeproj(scheme: "App", version_number: "0.9")
+    increment_version_number_in_xcodeproj(scheme: "App", version_number: "1.2")
     # increment_build_number_in_xcodeproj(scheme: "App")
     increment_build_number
     build_app(scheme: "App")
     upload_to_testflight(
-      changelog: "initial version",
+      changelog: "remove support for iPad",
       beta_app_description: "beta version desc",
       beta_app_review_info: {
         contact_email: "email@email.com",
@@ -79,14 +92,50 @@ platform :ios do
     )
   end
 
-  lane :release do
-    sync_code_signing(type: "appstore")
-    build_app(scheme: "App")
-    upload_to_app_store(submit_for_review: false)
+  lane :submit_build do
+    upload_to_app_store(
+      # build_number: '55',
+      skip_binary_upload: true,
+      run_precheck_before_submit: false,
+      submit_for_review: true,
+      skip_app_version_update: true,
+      automatic_release: false,
+      skip_metadata: true,
+      skip_screenshots: true,
+    )
+  end
+
+  lane :update_metadata do
+    precheck(default_rule_level: "warn")
+    upload_to_app_store(
+      run_precheck_before_submit: false,
+      edit_live: false,
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      skip_app_version_update: true,
+      force: true,
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_compliance_required: false,
+        export_compliance_encryption_updated: false,
+        export_compliance_app_type: nil,
+        export_compliance_uses_encryption: false,
+        export_compliance_is_exempt: false,
+        export_compliance_contains_third_party_cryptography: false,
+        export_compliance_contains_proprietary_cryptography: false,
+        content_rights_contains_third_party_content: true
+      }
+    )
   end
 
   lane :add_tester do
-    upload_to_testflight(skip_submission: true, distribute_only: true, first_name: "Toan", last_name: "Nguyen", email: "nttoan26@yahoo.com")
+    upload_to_testflight(
+      skip_submission: true,
+      distribute_only: true,
+      first_name: "Toan",
+      last_name: "Nguyen",
+      email: "nttoan26@yahoo.com"
+    )
   end
 
   lane :register_devices_adhoc do

@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios screenshots
 ```
 
-Generate new localized screenshots
+
 
 ### ios test
 
@@ -31,18 +31,26 @@ Generate new localized screenshots
 
 
 
-### ios testflight
+### ios submit_testflight_build
 
 ```sh
-[bundle exec] fastlane ios testflight
+[bundle exec] fastlane ios submit_testflight_build
 ```
 
 
 
-### ios release
+### ios submit_build
 
 ```sh
-[bundle exec] fastlane ios release
+[bundle exec] fastlane ios submit_build
+```
+
+
+
+### ios update_metadata
+
+```sh
+[bundle exec] fastlane ios update_metadata
 ```
 
 

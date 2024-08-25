@@ -31,8 +31,10 @@ yarn-error.log*
 .eslintcache
 android/gradle/wrapper/gradle-wrapper.jar
 android/gradle/wrapper/gradle-wrapper.properties
-ios/App/App.ipa
-ios/App/App.app.dSYM.zip
-ios/App/fastlane/report.xml
+ios/App/*.ipa
+ios/App/*.zip
+ios/App/fastlane/*.xml
 ios/App/fastlane/test_output/*
 ios/App/build_log/*
+ios/App/fastlane/*.html
+ios/App/fastlane/README.md
